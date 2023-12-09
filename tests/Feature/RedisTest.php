@@ -147,5 +147,13 @@ class RedisTest extends TestCase
         self::assertEquals("Indonesia", $response);
     }
 
+    public function testPublish()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            Redis::publish("channel-1", "Hello World $i");
+            Redis::publish("channel-2", "Good Bye $i");
+        }
+        self::assertTrue(true);
+    }
 
 }
