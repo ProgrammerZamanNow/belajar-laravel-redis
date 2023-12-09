@@ -30,5 +30,22 @@ class RedisTest extends TestCase
         self::assertNull($response);
     }
 
+    public function testList()
+    {
+        Redis::del("names");
+
+        Redis::rpush("names", "Eko");
+        Redis::rpush("names", "Kurniawan");
+        Redis::rpush("names", "Khannedy");
+
+        $response = Redis::lrange("names", 0, -1);
+        self::assertEquals(["Eko", "Kurniawan", "Khannedy"], $response);
+
+        self::assertEquals("Eko", Redis::lpop("names"));
+        self::assertEquals("Kurniawan", Redis::lpop("names"));
+        self::assertEquals("Khannedy", Redis::lpop("names"));
+
+    }
+
 
 }
