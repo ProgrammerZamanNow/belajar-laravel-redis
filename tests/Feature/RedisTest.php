@@ -156,4 +156,33 @@ class RedisTest extends TestCase
         self::assertTrue(true);
     }
 
+    public function testPublishStream()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            Redis::xadd("members", "*", [
+                "name" => "Eko $i",
+                "address" => "Indonesia"
+            ]);
+        }
+        self::assertTrue(true);
+    }
+
+    public function testCreateConsumer()
+    {
+        Redis::xgroup("create", "members", "group1", "0");
+        Redis::xgroup("createconsumer", "members", "group1", "consumer-1");
+        Redis::xgroup("createconsumer", "members", "group1", "consumer-2");
+        self::assertTrue(true);
+
+    }
+
+    public function testConsumerStream()
+    {
+        $result = Redis::xreadgroup("group1", "consumer-1", ["members" => ">"], 3, 3000);
+
+        self::assertNotNull($result);
+        echo json_encode($result, JSON_PRETTY_PRINT);
+    }
+
+
 }
