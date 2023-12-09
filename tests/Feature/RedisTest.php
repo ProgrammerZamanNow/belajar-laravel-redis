@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Redis;
+use Predis\Command\Argument\Geospatial\ByRadius;
+use Predis\Command\Argument\Geospatial\FromLonLat;
 use Tests\TestCase;
 
 class RedisTest extends TestCase
@@ -92,6 +94,20 @@ class RedisTest extends TestCase
             "email" => "eko@localhost",
             "age" => "30"
         ], $response);
+    }
+
+    public function testGeoPoint()
+    {
+        Redis::del("sellers");
+
+        Redis::geoadd("sellers", 106.820990, -6.174704, "Toko A");
+        Redis::geoadd("sellers", 106.822696, -6.176870, "Toko B");
+
+        $result = Redis::geodist("sellers", "Toko A", "Toko B", "km");
+        self::assertEquals(0.3061, $result);
+
+        $result = Redis::geosearch("sellers", new FromLonLat(106.821666, -6.175494), new ByRadius(5, "km"));
+        self::assertEquals(["Toko A", "Toko B"], $result);
     }
 
 
