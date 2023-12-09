@@ -78,5 +78,21 @@ class RedisTest extends TestCase
         self::assertEquals(["Kurniawan", "Khannedy", "Eko"], $response);
     }
 
+    public function testHash()
+    {
+        Redis::del("user:1");
+
+        Redis::hset("user:1", "name", "Eko");
+        Redis::hset("user:1", "email", "eko@localhost");
+        Redis::hset("user:1", "age", 30);
+
+        $response = Redis::hgetall("user:1");
+        self::assertEquals([
+            "name" => "Eko",
+            "email" => "eko@localhost",
+            "age" => "30"
+        ], $response);
+    }
+
 
 }
