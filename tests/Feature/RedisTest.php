@@ -47,5 +47,20 @@ class RedisTest extends TestCase
 
     }
 
+    public function testSet()
+    {
+        Redis::del("names");
+
+        Redis::sadd("names", "Eko");
+        Redis::sadd("names", "Eko");
+        Redis::sadd("names", "Kurniawan");
+        Redis::sadd("names", "Kurniawan");
+        Redis::sadd("names", "Khannedy");
+        Redis::sadd("names", "Khannedy");
+
+        $response = Redis::smembers("names");
+        self::assertEquals(["Eko", "Kurniawan", "Khannedy"], $response);
+    }
+
 
 }
