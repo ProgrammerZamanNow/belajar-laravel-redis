@@ -62,5 +62,21 @@ class RedisTest extends TestCase
         self::assertEquals(["Eko", "Kurniawan", "Khannedy"], $response);
     }
 
+    public function testSortedSet()
+    {
+
+        Redis::del("names");
+
+        Redis::zadd("names", 100, "Eko");
+        Redis::zadd("names", 100, "Eko");
+        Redis::zadd("names", 85, "Kurniawan");
+        Redis::zadd("names", 85, "Kurniawan");
+        Redis::zadd("names", 95, "Khannedy");
+        Redis::zadd("names", 95, "Khannedy");
+
+        $response = Redis::zrange("names", 0, -1);
+        self::assertEquals(["Kurniawan", "Khannedy", "Eko"], $response);
+    }
+
 
 }
