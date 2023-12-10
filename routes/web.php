@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/session/new', [\App\Http\Controllers\SessionController::class, "set"]);
+Route::get('/session/get', [\App\Http\Controllers\SessionController::class, "get"]);
+
 Route::get('/', function () {
     return view('welcome');
 });
